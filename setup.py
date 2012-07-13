@@ -18,7 +18,7 @@ setup(
     name             = 'lua-protobuf',
     version          = '0.0.1',
     packages         = [ 'lua_protobuf' ],
-    scripts          = ['protoc-gen-lua'],
+    scripts          = ['protoc-gen-lua', 'protoc-gen-lua.cmd'],
     install_requires = [ 'protobuf>=2.3.0' ],
     author           = 'Gregory Szorc',
     author_email     = 'gregory.szorc@gmail.com',
