@@ -711,7 +711,7 @@ def message_function_array(package, message):
     These are basically constructors and static methods in Lua land.
     '''
     return [
-        'static const struct luaL_Reg %s_functions [] = {' % message,
+        'static const struct luaL_Reg %s_functions [] = {' % message_function_prefix(package, message),
         '{"new", %snew},' % message_function_prefix(package, message),
         '{"parsefromstring", %sparsefromstring},' % message_function_prefix(package, message),
         '{NULL, NULL}',
@@ -729,7 +729,7 @@ def message_method_array(package, descriptor):
     fp = message_function_prefix(package, message)
 
     lines = []
-    lines.append('static const struct luaL_Reg %s_methods [] = {' % message)
+    lines.append('static const struct luaL_Reg %s_methods [] = {' % message_function_prefix(package, message))
     lines.append('{"serialized", %sserialized},' % fp)
     lines.append('{"clear", %sclear},' % fp)
     lines.append('{"__gc", %sgc},' % message_function_prefix(package, message))
@@ -768,8 +768,8 @@ def message_open_function(package, descriptor):
         'luaL_newmetatable(L, "%s");' % metatable(package, message),
         'lua_pushvalue(L, -1);',
         'lua_setfield(L, -2, "__index");',
-        'luaL_register(L, NULL, %s_methods);' % message,
-        'luaL_register(L, "%s", %s_functions);' % (lua_libname(package, message), message),
+        'luaL_register(L, NULL, %s_methods);' % message_function_prefix(package, message),
+        'luaL_register(L, "%s", %s_functions);' % (lua_libname(package, message), message_function_prefix(package, message)),
     ]
 
     for enum_descriptor in descriptor.enum_type:
@@ -1000,6 +1000,11 @@ def file_header(file_descriptor):
 
     for descriptor in file_descriptor.message_type:
         lines.extend(message_header(package, descriptor))
+        # TODO: Make this recursive (not just 2 levels)
+        for subd1 in descriptor.nested_type:
+            lines.extend(message_header('%s.%s'%(package, descriptor.name), subd1))
+            for subd2 in subd1.nested_type:
+                lines.extend(message_header('%s.%s.%s'%(package, descriptor.name, subd1.name), subd2))
 
     lines.append('#ifdef __cplusplus')
     lines.append('}')
@@ -1059,6 +1064,11 @@ def file_source(file_descriptor, ltag):
 
     for descriptor in file_descriptor.message_type:
         lines.append('%s(L);' % message_open_function_name(package, descriptor.name))
+        # TODO: Make this recursive (not just 2 levels)
+        for subd1 in descriptor.nested_type:
+            lines.append('%s(L);' % message_open_function_name('%s.%s'%(package, descriptor.name), subd1.name))
+            for subd2 in subd1.nested_type:
+                lines.append('%s(L);' % message_open_function_name('%s.%s.%s'%(package, descriptor.name, subd1.name), subd2.name))
 
     lines.append('return 1;')
     lines.append('}')
@@ -1066,6 +1076,11 @@ def file_source(file_descriptor, ltag):
 
     for descriptor in file_descriptor.message_type:
         lines.extend(message_source(package, descriptor))
+        # TODO: Make this recursive (not just 2 levels)
+        for subd1 in descriptor.nested_type:
+            lines.extend(message_source('%s.%s'%(package, descriptor.name), subd1))
+            for subd2 in subd1.nested_type:
+                lines.extend(message_source('%s.%s.%s'%(package, descriptor.name, subd1.name), subd2))
 
     # perform some hacky pretty-printing
     formatted = []
