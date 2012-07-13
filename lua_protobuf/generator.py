@@ -152,7 +152,7 @@ def source_header(filename, package, ltag):
         '//',
         '// source proto file: %s' % filename,
         '',
-        '#include "%s.pb-lua.h"' % package.replace('.', '/'),
+        '#include "%s.pb-lua.h"' % package.replace('.', '/').lower(),
         '',
         '#ifdef __cplusplus',
         'extern "C" { // make sure functions treated with C naming',

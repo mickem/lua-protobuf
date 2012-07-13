@@ -60,11 +60,11 @@ for i in range(0, len(request.proto_file)):
     cpp_namespace = '::%s' % package.replace('.', '::')
 
     f = response.file.add()
-    f.name = '%s.pb-lua.h' % package.replace('.', '/')
+    f.name = '%s.pb-lua.h' % package.replace('.', '/').lower()
     f.content = file_header(file_descriptor)
 
     f = response.file.add()
-    f.name = '%s.pb-lua.cc' % package.replace('.', '/')
+    f.name = '%s.pb-lua.cc' % package.replace('.', '/').lower()
     f.content = file_source(file_descriptor, ltag)
 
 f = response.file.add()
