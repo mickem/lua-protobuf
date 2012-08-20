@@ -770,6 +770,7 @@ def message_open_function(package, descriptor):
         'lua_setfield(L, -2, "__index");',
         'luaL_register(L, NULL, %s_methods);' % message_function_prefix(package, message),
         'luaL_register(L, "%s", %s_functions);' % (lua_libname(package, message), message_function_prefix(package, message)),
+        'lua_pop(L, 1);',
     ]
 
     for enum_descriptor in descriptor.enum_type:
@@ -1060,6 +1061,7 @@ def file_source(file_descriptor, ltag):
         # and we register this package as a module, complete with enumerations
         'luaL_Reg funcs [] = { { NULL, NULL } };',
         'luaL_register(L, "protobuf.%s", funcs);' % package,
+        'lua_pop(L, 1);',
     ])
 
     for descriptor in file_descriptor.message_type:
