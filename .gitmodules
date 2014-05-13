@@ -1,3 +1,0 @@
-[submodule "wiki"]
-	path = wiki
-	url = git@github.com:indygreg/lua-protobuf.wiki.git
