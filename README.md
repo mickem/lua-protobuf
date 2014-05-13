@@ -64,3 +64,4 @@ The produced C++ code contains _extern "C" { }_ blocks around all code that util
 Windows requires an identifier for symbols to be exported from shared libraries. If compiling the lua-protobuf output to a shared library, you'll need to use a preprocessor define:
 
     #define LUA_PROTOBUF_EXPORT __declspec(dllexport)
+
