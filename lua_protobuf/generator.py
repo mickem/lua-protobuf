@@ -60,10 +60,18 @@ extern "C" {
 
 #include <lua.h>
 
-#ifdef WINDOWS
-#define LUA_PROTOBUF_EXPORT __declspec(dllexport)
-#else
-#define LUA_PROTOBUF_EXPORT
+#if defined (WIN32) 
+  #if defined(lua_protobuf_NOLIB)
+    #define LUA_PROTOBUF_EXPORT
+  #else
+    #if defined(lua_protobuf_EXPORTS)
+      #define LUA_PROTOBUF_EXPORT __declspec(dllexport)
+    #else
+      #define LUA_PROTOBUF_EXPORT __declspec(dllimport)
+    #endif /* lua_protobuf_EXPORTS */
+  #endif /* lua_protobuf_NOLIB */
+#else /* defined (_WIN32) */
+ #define LUA_PROTOBUF_EXPORT
 #endif
 
 // type for callback function that is executed before Lua performs garbage
