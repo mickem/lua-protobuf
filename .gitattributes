@@ -1,0 +1,10 @@
+*        text=auto
+#sources
+*.py     text
+
+# Compiled Object files
+*.pyc    binary
+
+# Executables
+*.       text eol=cr
+*.cmd    text eol=cr
