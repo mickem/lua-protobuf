@@ -6,5 +6,5 @@
 *.pyc    binary
 
 # Executables
-*.       text eol=cr
-*.cmd    text eol=cr
+*.       text eol=lf
+*.cmd    text eol=lf
