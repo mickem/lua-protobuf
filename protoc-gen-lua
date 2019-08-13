@@ -48,8 +48,11 @@ ltag = ''
 # each input file to the compiler
 for i in range(0, len(request.proto_file)):
     file_descriptor = request.proto_file[i]
+    if file_descriptor.name not in request.file_to_generate:
+        continue
     filename = file_descriptor.name
     package = file_descriptor.package
+    target_name = filename.replace('.proto', '').lower()
 
     if file_descriptor.options.optimize_for == FileOptions.LITE_RUNTIME:
         ltag = 'Lite'
@@ -61,16 +64,18 @@ for i in range(0, len(request.proto_file)):
         break
 
     define_value = package.replace('.', '_').upper()
-    cpp_header = '%s.pb.h' % package.replace('.', '/')
+    cpp_header = '%s.pb.h' % target_name
     cpp_namespace = '::%s' % package.replace('.', '::')
 
     f = response.file.add()
-    f.name = '%s.pb-lua.h' % package.replace('.', '/').lower()
-    f.content = file_header(file_descriptor)
+    stderr.write('Generating : %s.pb-lua.h\n'%target_name)
+    f.name = '%s.pb-lua.h' % target_name
+    f.content = file_header(file_descriptor, target_name)
 
     f = response.file.add()
-    f.name = '%s.pb-lua.cc' % package.replace('.', '/').lower()
-    f.content = file_source(file_descriptor, ltag)
+    stderr.write('Generating : %s.pb-lua.cc\n'%target_name)
+    f.name = '%s.pb-lua.cc' % target_name
+    f.content = file_source(file_descriptor, target_name, ltag)
 
 f = response.file.add()
 f.name = 'lua-protobuf.h'
