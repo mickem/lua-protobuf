@@ -20,7 +20,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name             = 'lua-protobuf',
-    version          = '1.0.0',
+    version          = '1.0.1',
     author           = 'Michael Medin',
     author_email     = 'michael@medin.name',
     description      = 'Lua protocol buffer code generator',
