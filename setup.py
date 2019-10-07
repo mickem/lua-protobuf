@@ -1,4 +1,5 @@
-#  Copyright 2010 Gregory Szorc
+#  Copyright 2010 Gregory Szorc, 
+# This fork maintained by Michael Medin
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -14,15 +15,25 @@
 
 from setuptools import setup, find_packages
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name             = 'lua-protobuf',
-    version          = '0.0.1',
-    packages         = [ 'lua_protobuf' ],
-    scripts          = ['protoc-gen-lua', 'protoc-gen-lua.cmd'],
-    install_requires = [ 'protobuf>=2.3.0' ],
-    author           = 'Gregory Szorc',
-    author_email     = 'gregory.szorc@gmail.com',
+    version          = '1.0.0',
+    author           = 'Michael Medin',
+    author_email     = 'michael@medin.name',
     description      = 'Lua protocol buffer code generator',
-    license          = 'Apache 2.0',
-    url              = 'http://github.com/indygreg/lua-protobuf'
+    long_description = long_description,
+    long_description_content_type="text/markdown",
+    url              = 'http://github.com/mickem/lua-protobuf',
+    packages         = [ 'lua_protobuf' ],
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: Apache Software License",
+        "Operating System :: OS Independent",
+    ],
+    scripts          = ['protoc-gen-lua', 'protoc-gen-lua.cmd'],
+    python_requires  = '>=3.6',
+    install_requires = [ 'protobuf>=3.0.0' ]
 )
